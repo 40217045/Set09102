@@ -13,3 +13,9 @@ E:\40217045_CW1\40217045_CW1\obj\Debug\40217045_CW1.csproj.GenerateResource.Cach
 E:\40217045_CW1\40217045_CW1\obj\Debug\40217045_CW1.csproj.CoreCompileInputs.cache
 E:\40217045_CW1\40217045_CW1\obj\Debug\40217045_CW1.exe
 E:\40217045_CW1\40217045_CW1\obj\Debug\40217045_CW1.pdb
+E:\40217045_CW1\40217045_CW1\obj\Debug\NewMessage.g.cs
+E:\40217045_CW1\40217045_CW1\obj\Debug\NewMessage.baml
+E:\40217045_CW1\40217045_CW1\obj\Debug\Login.g.cs
+E:\40217045_CW1\40217045_CW1\obj\Debug\Login.baml
+E:\40217045_CW1\40217045_CW1\bin\Debug\Newtonsoft.Json.dll
+E:\40217045_CW1\40217045_CW1\bin\Debug\Newtonsoft.Json.xml
