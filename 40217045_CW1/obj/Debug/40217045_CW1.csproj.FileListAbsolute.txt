@@ -17,3 +17,5 @@ E:\40217045_CW1\40217045_CW1\obj\Debug\NewMessage.g.cs
 E:\40217045_CW1\40217045_CW1\obj\Debug\NewMessage.baml
 E:\40217045_CW1\40217045_CW1\obj\Debug\Login.g.cs
 E:\40217045_CW1\40217045_CW1\obj\Debug\Login.baml
+E:\40217045_CW1\40217045_CW1\bin\Debug\Newtonsoft.Json.dll
+E:\40217045_CW1\40217045_CW1\bin\Debug\Newtonsoft.Json.xml
