@@ -48,16 +48,18 @@ namespace _40217045_CW1
         private string[] TextspeakArray = new string[] { };
         private string[] expandedArray = new string[] { };
 
-        //List to store Incedents, Mentions and hashtags
+        //List to store Incedents, Mentions, Hashtags and Quarantines
         List<string> Hashtag = new List<string>();
         List<string> Trend = new List<string>();
         List<Incidents> Incident_List = new List<Incidents>();
+        List<string> Quarantine = new List<string>();
 
         public NewMessage(string messageID, string messageType, string username)
         {
             user = username;
-            LoadUser(user);// loads lists of users
+
             LoadLists(user);//Loads lists of sent messages 
+            LoadUser(user);// loads users Details
             LoadTextWord(); //Loads method for text speak
             InitializeComponent();
             msgType = messageType;
@@ -109,6 +111,8 @@ namespace _40217045_CW1
                     email = U.EmailAdd;
                     twitterhandle = U.Twitter;
                     MyPhoneNo = U.Phonenumber;
+                    break;
+
                 }
             }
         }
@@ -118,40 +122,27 @@ namespace _40217045_CW1
             try
             {
                 //loads sms messages from user
-                string FileLocSms = @"Resources\" + user + "-sms.json";
+                string FileLocSms = @"Resources\User Messages\" + user + "-sms.json";
                 string jsonSms = File.ReadAllText(FileLocSms);
                 SmsList = JsonConvert.DeserializeObject<List<Sms>>(jsonSms);
             }
-            catch (Exception)
-
-            {
-
-
-            }
+            catch (Exception) { }
             try
             {
                 //loads tweets from user
-                string FileLocTweet = @"Resources\" + user + "-tweet.json";
+                string FileLocTweet = @"Resources\User Messages\" + user + "-tweet.json";
                 string jsonTweet = File.ReadAllText(FileLocTweet);
                 TweetList = JsonConvert.DeserializeObject<List<Tweet>>(jsonTweet);
             }
-            catch (Exception)
-            {
-
-
-            }
+            catch (Exception) { }
             try
             {
                 //loads emails from user
-                string FileLocEmail = @"Resources\" + user + "-email.json";
+                string FileLocEmail = @"Resources\User Messages\" + user + "-email.json";
                 string jsonEmail = File.ReadAllText(FileLocEmail);
                 EmailList = JsonConvert.DeserializeObject<List<Email>>(jsonEmail);
             }
-            catch (Exception)
-            {
-
-
-            }
+            catch (Exception) { }
             try
             {
                 //Loads users from file
@@ -171,17 +162,24 @@ namespace _40217045_CW1
                 string jsonSIR = File.ReadAllText(FileLocSIR);
                 Incident_List = JsonConvert.DeserializeObject<List<Incidents>>(jsonSIR);
             }
-            catch (Exception)
+            catch (Exception) { }
+
+            try
             {
-
-
+                //Loads Quarantine URLS
+                string FileLocQuarantine = @"Resources\Quarantine.json";
+                string jsonQuarantine = File.ReadAllText(FileLocQuarantine);
+                Quarantine = JsonConvert.DeserializeObject<List<string>>(jsonQuarantine);
             }
+            catch (Exception) { }
+
+
 
             //Loads Mentions and Hashtag list from Csv File
 
 
 
-                    
+
         }
 
 
@@ -202,7 +200,7 @@ namespace _40217045_CW1
         private void SaveEmail(string user)
         {
             // Saves Email
-            string FileLoc = @"Resources\" + user + "-Email.json"; //filename where data will be stored
+            string FileLoc = @"Resources\User Messages\" + user + "-Email.json"; //filename where data will be stored
             File.WriteAllText(FileLoc, JsonConvert.SerializeObject(EmailList));
             Console.WriteLine("All data saved to " + FileLoc);
 
@@ -216,17 +214,18 @@ namespace _40217045_CW1
         private void newEmail()
         {
             ConvertTextWord();
+            UrlCheck(Message);
             string CentreNumber = "N/A";
             string Incident = "N/A";
             //Serious Incident Report check
             if (txtSubject.Text.ToLower().Contains("sir"))
             {
-                CentreNumber = txtCentreNumber1.Text+"-" + txtCentreNumber2.Text+ "-"+txtCentreNumber3.Text;
+                CentreNumber = txtCentreNumber1.Text + "-" + txtCentreNumber2.Text + "-" + txtCentreNumber3.Text;
                 Incident = cmbNature.Text;
-                Message = "Serious Incident Report \n Centre Number:" + CentreNumber+"\n Nature Of Incident: " + Incident+"\nMessage Reads:\n"+Message;
+                Message = "Serious Incident Report \n Centre Number:" + CentreNumber + "\n Nature Of Incident: " + Incident + "\nMessage Reads:\n" + Message;
 
                 //Checks if incedent has happened before
-                
+
                 try
                 {
                     bool PreviousIncident = false;
@@ -239,7 +238,7 @@ namespace _40217045_CW1
                         {
 
                             I.Occurances = I.Occurances + 1;
-                            
+
                             PreviousIncident = true;
                             break;
 
@@ -253,7 +252,7 @@ namespace _40217045_CW1
                     }
                     PreviousIncident = false;
                 }
-                catch (Exception){}
+                catch (Exception) { }
             }
 
 
@@ -289,7 +288,7 @@ namespace _40217045_CW1
 
         private void SaveTweet(string user)
         {
-            string FileLoc = @"Resources\" + user + "-Tweet.json"; //filename where data will be stored
+            string FileLoc = @"Resources\User Messages\" + user + "-Tweet.json"; //filename where data will be stored
             File.WriteAllText(FileLoc, JsonConvert.SerializeObject(TweetList));
             Console.WriteLine("All data saved to " + FileLoc);
         }
@@ -315,7 +314,7 @@ namespace _40217045_CW1
 
         private void newSms()
         {
-           
+
 
             double PhoneNumber;
             try
@@ -338,7 +337,7 @@ namespace _40217045_CW1
 
         private void SaveSMS(string user)
         {
-            string FileLoc = @"Resources\" + user + "-sms.json"; //filename where data will be stored
+            string FileLoc = @"Resources\User Messages\" + user + "-sms.json"; //filename where data will be stored
             File.WriteAllText(FileLoc, JsonConvert.SerializeObject(SmsList));
             Console.WriteLine("All data saved to " + FileLoc);
         }
@@ -362,7 +361,7 @@ namespace _40217045_CW1
                     Phrases.Add(values[1]);
 
                 }
-                
+
                 TextspeakArray = Abbreviations.ToArray();
                 expandedArray = Phrases.ToArray();
 
@@ -378,31 +377,31 @@ namespace _40217045_CW1
 
         private void ConvertTextWord()
         {
-            string text ="";
-            if (msgType =="SMS")
+            string text = "";
+            if (msgType == "SMS")
             {
                 text = " " + txtSms.Text + " ";
                 ConvertTextWord(text);
-                
+
             }
             else if (msgType == "Tweet")
             {
                 text = " " + txtTweet.Text + " ";
                 ConvertTextWord(text);
             }
-            else if (msgType=="Email")
+            else if (msgType == "Email")
             {
                 text = " " + txtEmail.Text + " ";
                 ConvertTextWord(text);
 
             }
-                      
+
         }
 
         private void ConvertTextWord(string text)
         {
-            
-              int total = TextspeakArray.Count();
+
+            int total = TextspeakArray.Count();
             for (int i = 0; i < total; i++)
             {
                 string str = " " + TextspeakArray[i] + " ";
@@ -423,7 +422,7 @@ namespace _40217045_CW1
                     string filename = @"Resources/textwords.csv";
                     StreamReader reader = new StreamReader(File.OpenRead(filename));
                     string expanded = expandedArray[i];
-                   
+
                     string Converted = Regex.Replace(text, str.ToLower(), str.ToLower() + " <" + expanded + "> ");
                     text = Converted;
 
@@ -435,12 +434,13 @@ namespace _40217045_CW1
             Message = text;
         }
 
+        //Checks if subject contains sir
         private void txtSubject_LostFocus(object sender, RoutedEventArgs e)
         {
-            if (txtSubject.Text.ToLower() == "sir")
+            if (txtSubject.Text.ToLower().Contains("sir "))
             {
                 this.Width = 500;
-                
+
             }
             else
             {
@@ -451,6 +451,56 @@ namespace _40217045_CW1
         private void btnCancel_Click(object sender, RoutedEventArgs e)
         {
             this.Close();
+        }
+
+        //Quarintine emails
+        private void UrlCheck(string m)
+        {
+            string text = m;
+            if (m.Contains("http://") || m.Contains("https://"))
+            {
+                WriteQuarantineList(m);
+                string Cleaned = Regex.Replace(text, @"http[^\s]+", "<URL>");
+                Message = Cleaned;
+                if (m.Contains("www."))
+                {
+                    WriteQuarantineList(Cleaned);
+                    Cleaned = Regex.Replace(Cleaned, @"www.[^\s]+", "<URL>");
+                    Message = Cleaned;
+                }
+
+
+            }
+            else
+            {
+                Message = text;
+            }
+
+        }
+
+        private void WriteQuarantineList(string m)
+        {
+            var regex = new Regex(@"http[^\s]+");
+
+            if (m.Contains("<URL>"))
+            {
+                regex = new Regex(@"www.[^\s]+");
+            }
+        
+            var matches = regex.Matches(m);
+
+            foreach (Match match in matches)
+            {
+                string Q = match.Value;
+                Console.WriteLine(m);
+                Quarantine.Add(Q);
+            }
+
+            // Saves Qurantined URL
+            string FileLoc = @"Resources\Quarantine.json";
+            File.WriteAllText(FileLoc, JsonConvert.SerializeObject(Quarantine));
+            Console.WriteLine("All data saved to " + FileLoc);
+
         }
 
         private void txtCentreNumber1_TextChanged(object sender, TextChangedEventArgs e)

@@ -44,22 +44,36 @@ namespace _40217045_CW1
         {
             try
             {
-                string FileLocSms = @"Resources\" + user + "-sms.json";
+                string FileLocSms = @"Resources\User Messages\" + user + "-sms.json";
                 string jsonSms = File.ReadAllText(FileLocSms);
                 SmsList = JsonConvert.DeserializeObject<List<Sms>>(jsonSms);
+            }
+            catch (Exception)
+            {
 
-                string FileLocTweet = @"Resources\" + user + "-tweet.json";
+
+            }
+            try
+            {
+                string FileLocTweet = @"Resources\User Messages\" + user + "-tweet.json";
                 string jsonTweet = File.ReadAllText(FileLocTweet);
                 TweetList = JsonConvert.DeserializeObject<List<Tweet>>(jsonTweet);
+            }
+            catch (Exception)
+            {
 
-                string FileLocEmail = @"Resources\" + user + "-email.json";
+
+            }
+            try
+            {
+                string FileLocEmail = @"Resources\User Messages\" + user + "-email.json";
                 string jsonEmail = File.ReadAllText(FileLocEmail);
                 EmailList = JsonConvert.DeserializeObject<List<Email>>(jsonEmail);
 
             }
             catch (Exception)
             {
-                
+
 
             }
         }
@@ -68,24 +82,24 @@ namespace _40217045_CW1
         {
             messageID = txtMessageID.Text.ToUpper();
 
-            
+
             if (messageID.StartsWith("S"))
             {
                 //MessageBox.Show("SMS messageID = " + messageID);
                 messageType = "SMS";
-                NewMessage NewWin = new NewMessage(messageID, messageType,Username);
+                NewMessage NewWin = new NewMessage(messageID, messageType, Username);
                 NewWin.ShowDialog();
             }
             else if (messageID.StartsWith("E"))
             {
-               //MessageBox.Show("Email messageID = " + messageID);
+                //MessageBox.Show("Email messageID = " + messageID);
                 messageType = "Email";
-                NewMessage NewWin = new NewMessage(messageID,messageType, Username);
+                NewMessage NewWin = new NewMessage(messageID, messageType, Username);
                 NewWin.ShowDialog();
             }
             else if (messageID.StartsWith("T"))
             {
-               //MessageBox.Show("Tweet messageID = " + messageID);
+                //MessageBox.Show("Tweet messageID = " + messageID);
                 messageType = "Tweet";
                 NewMessage NewWin = new NewMessage(messageID, messageType, Username);
                 NewWin.ShowDialog();
@@ -187,7 +201,7 @@ namespace _40217045_CW1
                 cvsSms.Visibility = Visibility.Visible;
                 cvsEmail.Visibility = Visibility.Hidden;
                 cvsTweet.Visibility = Visibility.Hidden;
-                
+
                 lstSmsInbox.Items.Clear();
 
             }
@@ -349,8 +363,8 @@ namespace _40217045_CW1
                     lstEmailSent.Items.Add("EmailID: " + E.MessageID +
                                             "\nEmail Sender: " + E.Sender +
                                              "\nEmail Recipient: " + E.Recipient +
-                                             "\nEmail Subject: " + E.Subject+
-                                             "\nEmail Message: " +E.Message+
+                                             "\nEmail Subject: " + E.Subject +
+                                             "\nEmail Message: " + E.Message +
                                              "\n----------------");
                 }
             }
@@ -385,9 +399,9 @@ namespace _40217045_CW1
             {
                 foreach (Tweet T in TweetList)
                 {
-                    lstTweetSent.Items.Add("TweetID: " + T.TweetID + 
-                                            "\nTwitter Handle: "+T.From+
-                                             "\nTweet: "+T.Message+
+                    lstTweetSent.Items.Add("TweetID: " + T.TweetID +
+                                            "\nTwitter Handle: " + T.From +
+                                             "\nTweet: " + T.Message +
                                              "\n----------------");
                 }
             }
