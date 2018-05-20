@@ -8,11 +8,17 @@ namespace _40217045_CW1
 {
     class User
     {
+        private string username;
         private string name;
         private string emailAdd;
         private string twitter;
-        private int phonenumber;
+        private double phonenumber;
 
+        public string Username
+        {
+            get { return username; }
+            set { username = value; }
+        }
         public string Name {
             get { return name; }
             set { name = value; }
@@ -27,7 +33,7 @@ namespace _40217045_CW1
             get { return twitter; }
             set { twitter = value; }
         }
-        public int Phonenumber
+        public double Phonenumber
         {
             get { return phonenumber; }
             set { phonenumber = value; }

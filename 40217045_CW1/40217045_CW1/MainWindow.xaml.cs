@@ -59,7 +59,7 @@ namespace _40217045_CW1
             }
             catch (Exception)
             {
-
+                
 
             }
         }
@@ -105,6 +105,7 @@ namespace _40217045_CW1
                 BtnSend.Background = new SolidColorBrush(UnselectedColour);
                 BtnReports.Background = new SolidColorBrush(UnselectedColour);
                 BtnSent.Background = new SolidColorBrush(UnselectedColour);
+                mnuSettings.Background = new SolidColorBrush(UnselectedColour);
                 cvsInbox.Visibility = Visibility.Visible;
                 cvsSend.Visibility = Visibility.Hidden;
                 cvsReports.Visibility = Visibility.Hidden;
@@ -117,6 +118,7 @@ namespace _40217045_CW1
                 BtnSend.Background = new SolidColorBrush(UnselectedColour);
                 BtnReports.Background = new SolidColorBrush(UnselectedColour);
                 BtnSent.Background = new SolidColorBrush(UnselectedColour);
+                mnuSettings.Background = new SolidColorBrush(UnselectedColour);
                 cvsInbox.Visibility = Visibility.Hidden;
 
             }
@@ -131,6 +133,7 @@ namespace _40217045_CW1
                 BtnSend.Background = new SolidColorBrush(SelectedColour);
                 BtnReports.Background = new SolidColorBrush(UnselectedColour);
                 BtnSent.Background = new SolidColorBrush(UnselectedColour);
+                mnuSettings.Background = new SolidColorBrush(UnselectedColour);
                 cvsInbox.Visibility = Visibility.Hidden;
                 cvsSend.Visibility = Visibility.Visible;
                 cvsReports.Visibility = Visibility.Hidden;
@@ -143,6 +146,7 @@ namespace _40217045_CW1
                 BtnSend.Background = new SolidColorBrush(UnselectedColour);
                 BtnSent.Background = new SolidColorBrush(UnselectedColour);
                 BtnReports.Background = new SolidColorBrush(UnselectedColour);
+                mnuSettings.Background = new SolidColorBrush(UnselectedColour);
                 cvsSend.Visibility = Visibility.Hidden;
             }
             //MessageBox.Show("Send", "Send Canvas", MessageBoxButton.OK);
@@ -156,6 +160,7 @@ namespace _40217045_CW1
                 BtnInbox.Background = new SolidColorBrush(UnselectedColour);
                 BtnSend.Background = new SolidColorBrush(UnselectedColour);
                 BtnSent.Background = new SolidColorBrush(UnselectedColour);
+                mnuSettings.Background = new SolidColorBrush(UnselectedColour);
                 cvsReports.Visibility = Visibility.Visible;
                 cvsInbox.Visibility = Visibility.Hidden;
                 cvsSend.Visibility = Visibility.Hidden;
@@ -167,6 +172,7 @@ namespace _40217045_CW1
                 BtnSend.Background = new SolidColorBrush(UnselectedColour);
                 BtnReports.Background = new SolidColorBrush(UnselectedColour);
                 BtnSent.Background = new SolidColorBrush(UnselectedColour);
+                mnuSettings.Background = new SolidColorBrush(UnselectedColour);
                 cvsReports.Visibility = Visibility.Hidden;
                 cvsSent.Visibility = Visibility.Hidden;
             }
@@ -251,12 +257,14 @@ namespace _40217045_CW1
 
         private void BtnSent_Click(object sender, RoutedEventArgs e)
         {
+            LoadLists(Username);
             if (cvsSent.Visibility == Visibility.Hidden)
             {
                 BtnInbox.Background = new SolidColorBrush(UnselectedColour);
                 BtnSend.Background = new SolidColorBrush(UnselectedColour);
                 BtnReports.Background = new SolidColorBrush(UnselectedColour);
                 BtnSent.Background = new SolidColorBrush(SelectedColour);
+                mnuSettings.Background = new SolidColorBrush(UnselectedColour);
                 cvsInbox.Visibility = Visibility.Hidden;
                 cvsSend.Visibility = Visibility.Hidden;
                 cvsReports.Visibility = Visibility.Hidden;
@@ -268,6 +276,7 @@ namespace _40217045_CW1
                 BtnInbox.Background = new SolidColorBrush(UnselectedColour);
                 BtnSend.Background = new SolidColorBrush(UnselectedColour);
                 BtnReports.Background = new SolidColorBrush(UnselectedColour);
+                mnuSettings.Background = new SolidColorBrush(UnselectedColour);
                 BtnSent.Background = new SolidColorBrush(UnselectedColour);
                 cvsSent.Visibility = Visibility.Hidden;
 
@@ -307,7 +316,7 @@ namespace _40217045_CW1
             }
             else
             {
-                lstSmsSent.Items.Add("There are no SMS");
+                lstSmsSent.Items.Add("There are no SMS,  You have not sent any Sms");
             }
 
         }
@@ -347,7 +356,7 @@ namespace _40217045_CW1
             }
             else
             {
-                lstEmailSent.Items.Add("There are no Emails");
+                lstEmailSent.Items.Add("There are no Emails, You have not sent any emails");
             }
         }
 
@@ -384,7 +393,7 @@ namespace _40217045_CW1
             }
             else
             {
-                lstTweetSent.Items.Add("There are no Tweets");
+                lstTweetSent.Items.Add("There are no Tweets,  You have not sent any Tweets");
             }
         }
 
