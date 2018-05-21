@@ -49,8 +49,8 @@ namespace _40217045_CW1
         private string[] expandedArray = new string[] { };
 
         //List to store Incedents, Mentions, Hashtags and Quarantines
-        List<string> Hashtag = new List<string>();
-        List<string> Trend = new List<string>();
+        List<Hashtags> Hashtag_List = new List<Hashtags>();
+        List<Mentions> Trend_List = new List<Mentions>();
         List<Incidents> Incident_List = new List<Incidents>();
         List<string> Quarantine = new List<string>();
 
@@ -172,12 +172,24 @@ namespace _40217045_CW1
                 Quarantine = JsonConvert.DeserializeObject<List<string>>(jsonQuarantine);
             }
             catch (Exception) { }
+          
+            try
+            {
+                //Loads  Hashtag
+                string FileLocHash = @"Resources\Hashtags.json";
+                string jsonHash = File.ReadAllText(FileLocHash);
+                Hashtag_List = JsonConvert.DeserializeObject<List<Hashtags>>(jsonHash);
+            }
+            catch (Exception) { }
 
-
-
-            //Loads Mentions and Hashtag list from Csv File
-
-
+            try
+            {
+                //Loads Mentions
+                string FileLocTrends = @"Resources\M-Trending.json";
+                string jsonTrends = File.ReadAllText(FileLocTrends);
+                Trend_List = JsonConvert.DeserializeObject<List<Mentions>>(jsonTrends);
+            }
+            catch (Exception) { }
 
 
         }
@@ -207,7 +219,7 @@ namespace _40217045_CW1
             // Saves Serious Incident Report
             string FileLocIncident = @"Resources\Incidents.json"; //filename where data will be stored
             File.WriteAllText(FileLocIncident, JsonConvert.SerializeObject(Incident_List));
-            Console.WriteLine("All data saved to " + FileLoc);
+            
 
         }
 
@@ -297,6 +309,9 @@ namespace _40217045_CW1
         {
             ConvertTextWord();
             Tweet T = new Tweet();
+            HashtagTrending(Message);
+            MentionsTrend(Message);
+            
             T.Message = Message;
 
             T.TweetID = lblTweetMessageID.Content.ToString();
@@ -502,7 +517,7 @@ namespace _40217045_CW1
             Console.WriteLine("All data saved to " + FileLoc);
 
         }
-
+        //mmakes sure that only numbers are entered in to the centre code
         private void txtCentreNumber1_TextChanged(object sender, TextChangedEventArgs e)
         {
             if (Regex.IsMatch(txtCentreNumber1.Text, "[^0-9]"))
@@ -529,5 +544,101 @@ namespace _40217045_CW1
                 txtCentreNumber3.Text = txtCentreNumber3.Text.Remove(txtCentreNumber3.Text.Length - 1);
             }
         }
+
+        //Tweet Hash tags trending
+        private void HashtagTrending(string m)
+        {
+
+            
+            var regex = new Regex(@"(?<=#)\w+");
+            var matches = regex.Matches(m);
+
+            foreach (Match matched in matches)
+            {
+                string Htag = "#" + matched.Value;
+                
+                try
+                {
+                    bool hashtagexists = false;
+                    foreach (Hashtags H in Hashtag_List)
+                    {
+                       if (Htag == H.Tag)
+                        {
+
+                            H.Trending = H.Trending + 1;
+                            Console.WriteLine("Hashtag = " + H.Tag
+                                             + " is trending " + H.Trending
+                                             + " retweet(s)");
+
+                            hashtagexists = true;
+                            break;
+
+                        }
+                    }//for loop ends
+                    if (hashtagexists == false)
+                    {
+                        Hashtags NewH = new Hashtags(Htag, 1);
+                        Hashtag_List.Add(NewH);
+                       
+                    }
+                    hashtagexists = false;
+                }
+                catch (Exception){}
+               
+            }
+
+            string FileLoct = @"Resources\Hashtags.json"; //filename where data will be stored
+            File.WriteAllText(FileLoct, JsonConvert.SerializeObject(Hashtag_List));
+            
+
+        }
+
+
+        private void MentionsTrend(string m)
+        {
+
+
+            var regex = new Regex(@"(?<=@)\w+");
+            var matches = regex.Matches(m);
+
+            foreach (Match matched in matches)
+            {
+                string Mentiontag = "@" + matched.Value;
+
+                try
+                {
+                    bool Mentionexists = false;
+                    foreach (Mentions M in Trend_List)
+                    {
+                        if (Mentiontag == M.Handle)
+                        {
+
+                            M.Trending = M.Trending + 1;
+                            
+
+                            Mentionexists = true;
+                            break;
+
+                        }
+                    }//for loop ends
+                    if (Mentionexists == false)
+                    {
+                        Mentions NewM = new Mentions(Mentiontag, 1);
+                        Trend_List.Add(NewM);
+
+                    }
+                    Mentionexists = false;
+                }
+                catch (Exception) { }
+
+            }
+
+            string FileLoct = @"Resources\M-Trending.json"; //filename where data will be stored
+            File.WriteAllText(FileLoct, JsonConvert.SerializeObject(Trend_List));
+
+
+        }
     }
+
+
 }
