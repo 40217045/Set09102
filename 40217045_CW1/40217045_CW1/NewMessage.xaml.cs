@@ -234,7 +234,7 @@ namespace _40217045_CW1
             {
                 CentreNumber = txtCentreNumber1.Text + "-" + txtCentreNumber2.Text + "-" + txtCentreNumber3.Text;
                 Incident = cmbNature.Text;
-                Message = "Serious Incident Report \n Centre Number:" + CentreNumber + "\n Nature Of Incident: " + Incident + "\nMessage Reads:\n" + Message;
+                Message = "Serious Incident Report \n Centre Number: " + CentreNumber + "\n Nature Of Incident: " + Incident + "\nMessage Reads:\n" + Message;
 
                 //Checks if incedent has happened before
 

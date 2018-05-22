@@ -27,6 +27,13 @@ namespace _40217045_CW1
         List<Sms> SmsList = new List<Sms>();
         List<Tweet> TweetList = new List<Tweet>();
         List<Email> EmailList = new List<Email>();
+
+        //List to store Incedents, Mentions, Hashtags and Quarantines
+        List<Hashtags> Hashtag_List = new List<Hashtags>();
+        List<Mentions> Trend_List = new List<Mentions>();
+        List<Incidents> Incident_List = new List<Incidents>();
+        List<string> Quarantine = new List<string>();
+
         string messageID = "";
         string messageType = "";
         string Username = "";
@@ -76,6 +83,42 @@ namespace _40217045_CW1
 
 
             }
+
+            try
+            {
+                //Loads Incident List
+                string FileLocSIR = @"Resources\Incidents.json";
+                string jsonSIR = File.ReadAllText(FileLocSIR);
+                Incident_List = JsonConvert.DeserializeObject<List<Incidents>>(jsonSIR);
+            }
+            catch (Exception) { }
+
+            try
+            {
+                //Loads Quarantine URLS
+                string FileLocQuarantine = @"Resources\Quarantine.json";
+                string jsonQuarantine = File.ReadAllText(FileLocQuarantine);
+                Quarantine = JsonConvert.DeserializeObject<List<string>>(jsonQuarantine);
+            }
+            catch (Exception) { }
+
+            try
+            {
+                //Loads  Hashtag
+                string FileLocHash = @"Resources\Hashtags.json";
+                string jsonHash = File.ReadAllText(FileLocHash);
+                Hashtag_List = JsonConvert.DeserializeObject<List<Hashtags>>(jsonHash);
+            }
+            catch (Exception) { }
+
+            try
+            {
+                //Loads Mentions
+                string FileLocTrends = @"Resources\M-Trending.json";
+                string jsonTrends = File.ReadAllText(FileLocTrends);
+                Trend_List = JsonConvert.DeserializeObject<List<Mentions>>(jsonTrends);
+            }
+            catch (Exception) { }
         }
 
         private void MessageIDSelection()
@@ -442,6 +485,177 @@ namespace _40217045_CW1
                 mnuSettings.Background = new SolidColorBrush(UnselectedColour);
                 cvsSettings.Visibility = Visibility.Hidden;
 
+            }
+        }
+
+        private void btnHash_Click(object sender, RoutedEventArgs e)
+        {
+            if (cvsHash.Visibility == Visibility.Hidden)
+            {
+                btnTrends.Background = new SolidColorBrush(UnselectedColour);
+                btnHash.Background = new SolidColorBrush(SelectedColour);
+                btnURLs.Background = new SolidColorBrush(UnselectedColour);
+                btnIncidents.Background = new SolidColorBrush(UnselectedColour);
+                cvsHash.Visibility = Visibility.Visible;
+                cvsTrends.Visibility = Visibility.Hidden;
+                cvsURLs.Visibility = Visibility.Hidden;
+                cvsIncidents.Visibility = Visibility.Hidden;
+                lstHash.Items.Clear();
+            }
+
+            else
+            {
+                btnTrends.Background = new SolidColorBrush(UnselectedColour);
+                btnHash.Background = new SolidColorBrush(UnselectedColour);
+                btnURLs.Background = new SolidColorBrush(UnselectedColour);
+                btnIncidents.Background = new SolidColorBrush(UnselectedColour);
+                cvsHash.Visibility = Visibility.Hidden;
+                lstHash.Items.Clear();
+            }
+
+            if (Hashtag_List.Count() != 0)
+            {
+                foreach (Hashtags H in Hashtag_List)
+                {
+                    lstHash.Items.Add("Hashtag: " + H.Tag +
+                                            "\nNumber Times used : " + H.Trending +
+                                             "\n----------------");
+                }
+            }
+            else
+            {
+                lstHash.Items.Add("There are no Hashtags");
+            }
+
+           
+        }
+
+        private void btnTrends_Click(object sender, RoutedEventArgs e)
+        {
+            if (cvsTrends.Visibility == Visibility.Hidden)
+            {
+                btnTrends.Background = new SolidColorBrush(SelectedColour);
+                btnHash.Background = new SolidColorBrush(UnselectedColour);
+                btnURLs.Background = new SolidColorBrush(UnselectedColour);
+                btnIncidents.Background = new SolidColorBrush(UnselectedColour);
+                cvsHash.Visibility = Visibility.Hidden;
+                cvsTrends.Visibility = Visibility.Visible;
+                cvsURLs.Visibility = Visibility.Hidden;
+                cvsIncidents.Visibility = Visibility.Hidden;
+                lstTrends.Items.Clear();
+            }
+
+            else
+            {
+                btnTrends.Background = new SolidColorBrush(UnselectedColour);
+                btnHash.Background = new SolidColorBrush(UnselectedColour);
+                btnURLs.Background = new SolidColorBrush(UnselectedColour);
+                btnIncidents.Background = new SolidColorBrush(UnselectedColour);
+                cvsHash.Visibility = Visibility.Hidden;
+                cvsTrends.Visibility = Visibility.Hidden;
+                cvsURLs.Visibility = Visibility.Hidden;
+                cvsIncidents.Visibility = Visibility.Hidden;
+                lstTrends.Items.Clear();
+            }
+
+            if (Trend_List.Count() != 0)
+            {
+                foreach (Mentions M in Trend_List)
+                {
+                    lstTrends.Items.Add("Twitter Handle: " + M.Handle +
+                                            "\nNumber Times used : " + M.Trending +
+                                             "\n----------------");
+                }
+            }
+            else
+            {
+                lstTrends.Items.Add("There are no Trends to be shown");
+            }
+        }
+
+        private void btnURLs_Click(object sender, RoutedEventArgs e)
+        {
+            if (cvsURLs.Visibility == Visibility.Hidden)
+            {
+                btnTrends.Background = new SolidColorBrush(UnselectedColour);
+                btnHash.Background = new SolidColorBrush(UnselectedColour);
+                btnURLs.Background = new SolidColorBrush(SelectedColour);
+                btnIncidents.Background = new SolidColorBrush(UnselectedColour);
+                cvsHash.Visibility = Visibility.Hidden;
+                cvsTrends.Visibility = Visibility.Hidden;
+                cvsURLs.Visibility = Visibility.Visible;
+                cvsIncidents.Visibility = Visibility.Hidden;
+                lstURLs.Items.Clear();
+            }
+
+            else
+            {
+                btnTrends.Background = new SolidColorBrush(UnselectedColour);
+                btnHash.Background = new SolidColorBrush(UnselectedColour);
+                btnURLs.Background = new SolidColorBrush(UnselectedColour);
+                btnIncidents.Background = new SolidColorBrush(UnselectedColour);
+                cvsHash.Visibility = Visibility.Hidden;
+                cvsTrends.Visibility = Visibility.Hidden;
+                cvsURLs.Visibility = Visibility.Hidden;
+                cvsIncidents.Visibility = Visibility.Hidden;
+                lstURLs.Items.Clear();
+            }
+
+            if (Quarantine.Count() != 0)
+            {
+                foreach (string s in Quarantine)
+                {
+                    lstURLs.Items.Add("Quarintined URL: " + s +
+                                            
+                                             "\n----------------");
+                }
+            }
+            else
+            {
+                lstURLs.Items.Add("There are no Quarintined URLs");
+            }
+        }
+
+        private void btnIncidents_Click(object sender, RoutedEventArgs e)
+        {
+            if (cvsIncidents.Visibility == Visibility.Hidden)
+            {
+                btnTrends.Background = new SolidColorBrush(UnselectedColour);
+                btnHash.Background = new SolidColorBrush(UnselectedColour);
+                btnURLs.Background = new SolidColorBrush(UnselectedColour);
+                btnIncidents.Background = new SolidColorBrush(UnselectedColour);
+                cvsHash.Visibility = Visibility.Hidden;
+                cvsTrends.Visibility = Visibility.Hidden;
+                cvsURLs.Visibility = Visibility.Hidden;
+                cvsIncidents.Visibility = Visibility.Visible;
+                lstIncidents.Items.Clear();
+            }
+
+            else
+            {
+                btnTrends.Background = new SolidColorBrush(UnselectedColour);
+                btnHash.Background = new SolidColorBrush(UnselectedColour);
+                btnURLs.Background = new SolidColorBrush(UnselectedColour);
+                btnIncidents.Background = new SolidColorBrush(UnselectedColour);
+                cvsHash.Visibility = Visibility.Hidden;
+                cvsTrends.Visibility = Visibility.Hidden;
+                cvsURLs.Visibility = Visibility.Hidden;
+                cvsIncidents.Visibility = Visibility.Hidden;
+                lstIncidents.Items.Clear();
+            }
+
+            if (Incident_List.Count() != 0)
+            {
+                foreach (Incidents I in Incident_List)
+                {
+                    lstIncidents.Items.Add("Incident Type: " + I.Incident +
+                                            "\nNumber Occurances : " + I.Occurances +
+                                             "\n----------------");
+                }
+            }
+            else
+            {
+                lstHash.Items.Add("No Incidents have occured");
             }
         }
     }
