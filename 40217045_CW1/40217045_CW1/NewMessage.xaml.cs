@@ -62,6 +62,9 @@ namespace _40217045_CW1
             LoadUser(user);// loads users Details
             LoadTextWord(); //Loads method for text speak
             InitializeComponent();
+            txtEmail.MaxLength = 1028;
+            txtSms.MaxLength = 144;
+            txtTweet.MaxLength = 140;
             msgType = messageType;
             //selects what canvas to display
             if (msgType == "SMS")
@@ -172,7 +175,7 @@ namespace _40217045_CW1
                 Quarantine = JsonConvert.DeserializeObject<List<string>>(jsonQuarantine);
             }
             catch (Exception) { }
-          
+
             try
             {
                 //Loads  Hashtag
@@ -203,10 +206,85 @@ namespace _40217045_CW1
 
         private void btnSendEmail_Click(object sender, RoutedEventArgs e)
         {
-            newEmail();
-            SaveEmail(user);
-            MessageBox.Show("Email Sent");
-            this.Close();
+            bool valid = false;
+            valid = EmailErrorCheck(valid);
+            
+            if (valid == true)
+            {
+                newEmail();
+                SaveEmail(user);
+                MessageBox.Show("Email Sent");
+                this.Close();
+            }
+        }
+
+        private bool EmailErrorCheck(bool v)
+        {
+            bool subjctValid = false;
+            bool RecipientValid = false;
+            //Email address validation
+            if (txtRecipient.Text.Contains('@'))
+            {
+                if (txtRecipient.Text.Contains(".uk") || txtRecipient.Text.Contains(".com"))
+                {
+                    RecipientValid = true;
+                }
+                else
+                {
+                   // MessageBox.Show("Recipient is Invalid");
+                    RecipientValid = false;
+
+                }
+            }
+            else
+            {
+               // MessageBox.Show("Recipient is Invalid");
+                RecipientValid = false;
+
+            }
+
+            if (txtSubject.Text.Length >= 1 && !txtSubject.Text.ToLower().Contains("sir"))
+            {
+                subjctValid = true;
+            }
+            else if (txtSubject.Text.Length >= 1 && txtSubject.Text.ToLower().Contains("sir"))
+            {
+                    if (txtCentreNumber1.Text.Length >=1 && txtCentreNumber2.Text.Length >= 1&& txtCentreNumber3.Text.Length >= 1 && !cmbNature.Text.Contains(""))
+                {
+                    subjctValid = true;
+                }
+                else
+                {
+                    subjctValid = false;
+                }
+            }
+            else
+            {
+                subjctValid = false;
+                //MessageBox.Show("Subject Required");
+            }
+
+
+            if (subjctValid == false && RecipientValid == false)
+            {
+                MessageBox.Show("Recipient and Subject are Invalid");
+                return v = false;
+            }
+            else if (subjctValid == false && RecipientValid == true)
+            {
+                MessageBox.Show("Subject Required");
+                return v = false;
+            }
+            else if (subjctValid == true && RecipientValid == false)
+            {
+                MessageBox.Show("Recipient is Invalid");
+                return v = false;
+            }
+            else
+            {
+                v = true;
+                return v;
+            }
         }
 
         private void SaveEmail(string user)
@@ -219,7 +297,7 @@ namespace _40217045_CW1
             // Saves Serious Incident Report
             string FileLocIncident = @"Resources\Incidents.json"; //filename where data will be stored
             File.WriteAllText(FileLocIncident, JsonConvert.SerializeObject(Incident_List));
-            
+
 
         }
 
@@ -311,7 +389,7 @@ namespace _40217045_CW1
             Tweet T = new Tweet();
             HashtagTrending(Message);
             MentionsTrend(Message);
-            
+
             T.Message = Message;
 
             T.TweetID = lblTweetMessageID.Content.ToString();
@@ -501,7 +579,7 @@ namespace _40217045_CW1
             {
                 regex = new Regex(@"www.[^\s]+");
             }
-        
+
             var matches = regex.Matches(m);
 
             foreach (Match match in matches)
@@ -549,20 +627,20 @@ namespace _40217045_CW1
         private void HashtagTrending(string m)
         {
 
-            
+
             var regex = new Regex(@"(?<=#)\w+");
             var matches = regex.Matches(m);
 
             foreach (Match matched in matches)
             {
                 string Htag = "#" + matched.Value;
-                
+
                 try
                 {
                     bool hashtagexists = false;
                     foreach (Hashtags H in Hashtag_List)
                     {
-                       if (Htag == H.Tag)
+                        if (Htag == H.Tag)
                         {
 
                             H.Trending = H.Trending + 1;
@@ -579,17 +657,17 @@ namespace _40217045_CW1
                     {
                         Hashtags NewH = new Hashtags(Htag, 1);
                         Hashtag_List.Add(NewH);
-                       
+
                     }
                     hashtagexists = false;
                 }
-                catch (Exception){}
-               
+                catch (Exception) { }
+
             }
 
             string FileLoct = @"Resources\Hashtags.json"; //filename where data will be stored
             File.WriteAllText(FileLoct, JsonConvert.SerializeObject(Hashtag_List));
-            
+
 
         }
 
@@ -614,7 +692,7 @@ namespace _40217045_CW1
                         {
 
                             M.Trending = M.Trending + 1;
-                            
+
 
                             Mentionexists = true;
                             break;
